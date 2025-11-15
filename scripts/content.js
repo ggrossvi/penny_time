@@ -1,8 +1,10 @@
 // #main-content > devsite-content > article
 
-function renderShoppingTotal(body) {
-    alert("renderShoppingTotal called with:", body);
-    const allElements = Array.from(document.querySelectorAll("body *"));
+function renderShoppingTotal(root = document.body) {
+  // Accept an optional root element to scope the search (defaults to document.body)
+  if (!root) return null;
+  alert("renderShoppingTotal called with: " + (root && root.nodeName ? root.nodeName : String(root)));
+  const allElements = Array.from((root.querySelectorAll && root.querySelectorAll('*')) || []);
 
     //Define key word matching pattern using Regex for variations of total
     const keywordRegex = /(grand total|order total|estimated total|est\.?\s?total|subtotal|sub total|final total|final price|total due|total amount|amount due|amount to pay|due today|checkout total|payment total|item total|estimate|total)/i;
@@ -55,7 +57,7 @@ function renderShoppingTotal(body) {
 // Try to run the shopping-total scanner when the page is ready.
 // Prefer an <article> element if present, otherwise fall back to document.body.
 function tryRenderShoppingTotal() {
-  const target = document.querySelector('article') ?? document.querySelector('body');
+  const target = document.querySelector('body');
   if (!target) {
     alert('renderShoppingTotal: no <article> or <body> found yet.');
     return;
