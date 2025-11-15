@@ -12,11 +12,12 @@ function updateDisplay(value) {
   if (!n || Number.isNaN(n)) {
     timeEl.textContent = "Couldn't determine cart total.";
   } else {
-    timeEl.textContent = `⏱️ ${n} minute(s) to read`;
+    //timeEl.textContent = `⏱️ ${n} minute(s) to read`;
+    timeEl.textContent = `$${n}`;
   }
   // TEMPORARY: show a modal alert for testing to confirm popup receives the value
   try {
-    alert('Popup total: ' + (n && !Number.isNaN(n) ? n : 'unknown'));
+    //alert('Popup total: ' + (n && !Number.isNaN(n) ? n : 'unknown'));
   } catch (e) {
     // ignore in non-window contexts
   }
