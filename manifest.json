@@ -7,7 +7,8 @@
 
   "permissions": [
     "scripting",
-    "tabs"
+    "tabs",
+    "storage"
   ],
 
   "background": {
@@ -19,7 +20,12 @@
       "js": ["scripts/content.js"],
       "matches": [
         "https://developer.chrome.com/docs/*",
-        "https://*/*",
+        "https://www.abercrombie.com/shop/*",
+        "https://www.amazon.com/*",
+        "https://www.bestbuy.com/*",
+        "https://www.walmart.com/*",
+        "https://www.target.com/*",
+        "https://secure-oldnavy.gap.com/shopping-bag*",
         "https://developer.chrome.com/docs/extensions/*"
       ]
     }

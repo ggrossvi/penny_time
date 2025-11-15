@@ -47,7 +47,22 @@ function renderShoppingTotal(root = document.body) {
         const total = best.price.toFixed(2);
         const totalPriceNum = Number(total);
         alert("Identified total price: " + total + " from element: " + best.el + " with text: " + best.text);
-    return totalPriceNum;
+        // Send message to background to open popup window (URL method)
+        try {
+          if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+            try {
+              // Fire-and-forget sendMessage to avoid waiting for a response
+              chrome.runtime.sendMessage({ type: 'SHOW_READING_TIME', minutes: totalPriceNum });
+              try { alert('Popup request sent (minutes: ' + totalPriceNum + ')'); } catch (e) {}
+            } catch (err) {
+              console.error('content: sendMessage exception', err);
+              try { alert('Failed to request popup: ' + String(err)); } catch (e) {}
+            }
+          }
+        } catch (err) {
+          console.error('content: sendMessage exception', err);
+        }
+        return totalPriceNum;
   } else {
         //alert("No total price candidates found.");
     return null;
