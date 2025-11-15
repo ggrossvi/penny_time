@@ -1,16 +1,31 @@
+
 {
   "manifest_version": 3,
   "name": "Reading time",
   "version": "1.0",
   "description": "Add the reading time to Chrome Extension documentation articles",
+
+  "permissions": [
+    "scripting",
+    "tabs"
+  ],
+
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
       "matches": [
         "https://developer.chrome.com/docs/*",
-        "https://developer.chrome.com/docs/extensions/*",
-        "https://developer.chrome.com/docs/webstore/*"
+        "https://*/*",
+        "https://developer.chrome.com/docs/extensions/*"
       ]
     }
-  ]
+  ],
+
+  "action": {
+    "default_title": "Reading Time Helper"
+  }
 }

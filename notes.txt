@@ -1,0 +1,7 @@
+sample if you want to add all sites
+"content_scripts": [
+    {
+      "matches": ["https://developer.chrome.com/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
