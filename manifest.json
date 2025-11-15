@@ -1,9 +1,9 @@
 
 {
   "manifest_version": 3,
-  "name": "Reading time",
+  "name": "Penny time",
   "version": "1.0",
-  "description": "Add the reading time to Chrome Extension documentation articles",
+  "description": "Add the spending total to Chrome Extension documentation articles",
 
   "permissions": [
     "scripting",
@@ -26,6 +26,6 @@
   ],
 
   "action": {
-    "default_title": "Reading Time Helper"
+    "default_title": "Mindful Spending Helper"
   }
 }

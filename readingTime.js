@@ -3,10 +3,14 @@ const params = new URLSearchParams(window.location.search);
 const minutesParam = params.get("minutes");
 const minutes = Number(minutesParam);
 
-const timeEl = document.getElementById("time");
+const timeEl = document.getElementById("totalDisplay");
 
-if (!minutes || Number.isNaN(minutes)) {
-  timeEl.textContent = "Couldn't determine reading time.";
+if (!timeEl) {
+  console.warn('readingTime.js: element with id "totalDisplay" not found in DOM. Skipping text update.');
 } else {
-  timeEl.textContent = `⏱️ ${minutes} minute(s) to read`;
+  if (!minutes || Number.isNaN(minutes)) {
+    timeEl.textContent = "Couldn't determine cart total.";
+  } else {
+    timeEl.textContent = `⏱️ ${minutes} minute(s) to read`;
+  }
 }

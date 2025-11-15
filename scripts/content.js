@@ -1,75 +1,81 @@
 // #main-content > devsite-content > article
 
-function renderReadingTime(article) {
-  console.log("renderReadingTime called with:", article);
+function renderShoppingTotal(body) {
+    alert("renderShoppingTotal called with:", body);
+    const allElements = Array.from(document.querySelectorAll("body *"));
 
-  // If we weren't provided an article, we don't need to render anything.
-  if (!article) {
-    return;
-  }
+    //Define key word matching pattern using Regex for variations of total
+    const keywordRegex = /(grand total|order total|estimated total|est\.?\s?total|subtotal|sub total|final total|final price|total due|total amount|amount due|amount to pay|due today|checkout total|payment total|item total|estimate|total)/i;
 
-  const text = article.textContent || "";
-  const wordMatchRegExp = /[^\s]+/g; // Regular expression
-  const words = text.matchAll(wordMatchRegExp);
+    //Define a pattern for matching text or elements that might be the price using regex
+    const priceRegex = /(\$|USD)?\s?\d{1,5}(\.\d{2})?/;
 
-  // matchAll returns an iterator, convert to array to get word count
-  const wordCount = [...words].length;
+    //This list stores every element that might be our total price
+    let candidates = [];
 
-  // If no words, don't bother
-  if (wordCount === 0) {
-    console.log("No words found in article.");
-    return;
-  }
+    //Loop through every element in the body
+    allElements.forEach(el => {
+        const text = el.textContent.trim(); //change to text
 
-  const readingTime = Math.round(wordCount / 200) || 1;
+        //Check if element contains both price and text for total
+        if (keywordRegex.test(text) && priceRegex.test(text)) {
 
-  // 🔸 Send message to background to open popup window
-  if (typeof chrome !== "undefined" && chrome.runtime?.sendMessage) {
-    chrome.runtime.sendMessage({
-      type: "SHOW_READING_TIME",
-      minutes: readingTime
+            const priceMatch = text.match(priceRegex)[0];
+            const price = parseFloat(priceMatch.replace(/[^0-9.]/g, ""));
+
+            let score = 0;
+
+            if (/grand total/i.test(text)) score += 5;
+            if (/estimated total|est\.?\s?total/i.test(text)) score += 4;
+            if (/order total/i.test(text)) score += 3;
+            if (/final total|final price/i.test(text)) score += 3;
+            if (/subtotal|sub total/i.test(text)) score += 1;
+            if (/total/i.test(text)) score += 1;
+
+            score += price / 100;
+
+            candidates.push({ el, text, price, score });
+        }
     });
+
+    if (candidates.length > 0) {
+
+        candidates.sort((a, b) => b.score - a.score);
+        const best = candidates[0];
+        const total = best.price.toFixed(2);
+        const totalPriceNum = Number(total);
+        alert("Identified total price: " + total + " from element: " + best.el + " with text: " + best.text);
+    return totalPriceNum;
+  } else {
+        alert("No total price candidates found.");
+    return null;
   }
-
-  // Create inline badge in article
-  const badge = document.createElement("p");
-  // Use the same styling as the publish information in an article's header
-  badge.classList.add("color-secondary-text", "type--caption");
-  badge.textContent = `⏱️ ${readingTime} min read`;
-
-  // Support for API reference docs
-  const heading = article.querySelector("h1");
-  // Support for article docs with date
-  const date = article.querySelector("time")?.parentNode;
-
-  // Fallback to article if there is no date or heading
-  const target = date ?? heading ?? article;
-  target.insertAdjacentElement("afterend", badge);
-
-  console.log("wordCount:", wordCount, "readingTime:", readingTime);
-  console.log("badge:", badge);
 }
 
-// Run immediately for existing article
-renderReadingTime(document.querySelector("article"));
+// Try to run the shopping-total scanner when the page is ready.
+// Prefer an <article> element if present, otherwise fall back to document.body.
+function tryRenderShoppingTotal() {
+  const target = document.querySelector('article') ?? document.querySelector('body');
+  if (!target) {
+    alert('renderShoppingTotal: no <article> or <body> found yet.');
+    return;
+  }
+    try {
+    const total = renderShoppingTotal(target);
+    alert('renderShoppingTotal returned: ' + String(total));
+  } catch (err) {
+    alert('renderShoppingTotal threw an error: ' + String(err));
+  }
+}
 
-
-// Watch for new articles (SPA support)
-const observerTarget =
-  document.querySelector("devsite-content") || document.body;
-
-const observer = new MutationObserver((mutations) => {
-  for (const mutation of mutations) {
-    for (const node of mutation.addedNodes) {
-      if (node instanceof Element && node.tagName === "ARTICLE") {
-        console.log("New <article> detected:", node);
-        renderReadingTime(node);
-      }
-    }
+// Run when DOM is ready, on load, and immediately as a best-effort.
+document.addEventListener('DOMContentLoaded', tryRenderShoppingTotal);
+window.addEventListener('load', tryRenderShoppingTotal);
+tryRenderShoppingTotal();
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "getShoppingTotal") {
+    const total = renderShoppingTotal(document.body);
+    sendResponse({ total });
   }
 });
 
-observer.observe(observerTarget, {
-  childList: true,
-  subtree: true
-});

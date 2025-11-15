@@ -5,3 +5,49 @@ sample if you want to add all sites
       "js": ["content.js"]
     }
   ],
+
+
+
+// modules/totals.js
+
+// --- Total Detection ---
+function getCheckoutTotal() {
+    const allElements = Array.from(document.querySelectorAll("body *"));
+
+    const keywordRegex = /(grand total|order total|estimated total|est\.?\s?total|subtotal|sub total|final total|final price|total due|total amount|amount due|amount to pay|due today|checkout total|payment total|item total|estimate|total)/i;
+    const priceRegex = /(\$|USD)?\s?\d{1,5}(\.\d{2})?/;
+
+    let candidates = [];
+
+    allElements.forEach(el => {
+        const text = el.textContent.trim();
+        if (keywordRegex.test(text) && priceRegex.test(text)) {
+            const match = text.match(priceRegex)[0];
+            const price = parseFloat(match.replace(/[^0-9.]/g, ""));
+
+            let score = 0;
+            if (/grand total/i.test(text)) score += 5;
+            if (/estimated total/i.test(text)) score += 4;
+            if (/order total/i.test(text)) score += 3;
+
+            score += price / 100;
+
+            candidates.push({ text, price, score });
+        }
+    });
+
+    if (candidates.length === 0) return null;
+
+    candidates.sort((a, b) => b.score - a.score);
+    return Number(candidates[0].price.toFixed(2));
+}
+
+// --- Labor Cost Calculation ---
+export function calculateLaborHours(total) {
+    const HOURLY_RATE = 28.0;
+
+    if (!total || total <= 0) return null;
+
+    const hours = total / HOURLY_RATE;
+    return Number(hours.toFixed(2));
+}
