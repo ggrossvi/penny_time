@@ -11,7 +11,7 @@ People need to slow down when they find themselves "taking advantage of this gre
 Chrome users who shop when experiencing any of the following: heightened stress, heightened emotional state (ex: anger, sadness, frustration), boredom, mentally altered states (such as alcohol consumption).
 
 # Solution
-![Penny, shopping buddy](images/penny-logo-48.png)
+![Penny, shopping buddy](images/penny-logo-128.png)
 Meet Penny, your shopping buddy that helps you mentally checkin before you complete your online purchase. Before you complete a purchase, Penny will pop up to check in on you before you complete your checkout. She will notify you how much you're about to spend and remind you of your goals and potential savings by not ordering your items.
 
 Penny isn't here to shame you, she's here to help you checkin with your mental state and lead you to other solutions that can make you happy while keeping your financial goals in mind.
