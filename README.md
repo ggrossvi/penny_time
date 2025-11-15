@@ -42,6 +42,8 @@ Check out the Chrome Extension here! - Link (need link or don't share)?
 
 <img src="https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E" alt ="Javascript"/> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt=CSS> <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML"> <img src="https://img.shields.io/badge/Google_chrome-4285F4?style=for-the-badge&logo=Google-chrome&logoColor=white" alt="Chrome Extension">
 
+[![Watch the demo](images/introducing-Penny-screenshot.png)](/images/introducing-penny.mp4)
+
 # Interested in reading more this project?
 
 <p><a href="https://www.canva.com/design/DAG4mzJff6s/dS91hlC80IDlTvKgyxLsmA/view?utm_content=DAG4mzJff6s&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h5c40615556">Checkout the presentation deck!</a></p>
