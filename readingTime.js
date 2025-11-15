@@ -17,7 +17,7 @@ function updateDisplay(value) {
   }
   // TEMPORARY: show a modal alert for testing to confirm popup receives the value
   try {
-    //alert('Popup total: ' + (n && !Number.isNaN(n) ? n : 'unknown'));
+    //console.log('Popup total: ' + (n && !Number.isNaN(n) ? n : 'unknown'));
   } catch (e) {
     // ignore in non-window contexts
   }

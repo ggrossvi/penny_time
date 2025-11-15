@@ -3,7 +3,7 @@
 function renderShoppingTotal(root = document.body) {
   // Accept an optional root element to scope the search (defaults to document.body)
   if (!root) return null;
-  //alert("renderShoppingTotal called with: " + (root && root.nodeName ? root.nodeName : String(root)));
+  //console.log("renderShoppingTotal called with: " + (root && root.nodeName ? root.nodeName : String(root)));
   const allElements = Array.from((root.querySelectorAll && root.querySelectorAll('*')) || []);
 
     //Define key word matching pattern using Regex for variations of total
@@ -46,17 +46,17 @@ function renderShoppingTotal(root = document.body) {
         const best = candidates[0];
         const total = best.price.toFixed(2);
         const totalPriceNum = Number(total);
-        alert("Identified total price: " + total + " from element: " + best.el + " with text: " + best.text);
+        console.log('[content] Identified total price: ' + total, best.el, 'text:', best.text);
         // Send message to background to open popup window (URL method)
         try {
           if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
             try {
               // Fire-and-forget sendMessage to avoid waiting for a response
               chrome.runtime.sendMessage({ type: 'SHOW_READING_TIME', minutes: totalPriceNum });
-              try { alert('Popup request sent (minutes: ' + totalPriceNum + ')'); } catch (e) {}
-            } catch (err) {
+              console.log('[content] Popup request sent (minutes: ' + totalPriceNum + ')');
+              } catch (err) {
               console.error('content: sendMessage exception', err);
-              try { alert('Failed to request popup: ' + String(err)); } catch (e) {}
+              console.error('[content] Failed to request popup: ' + String(err));
             }
           }
         } catch (err) {
@@ -64,7 +64,7 @@ function renderShoppingTotal(root = document.body) {
         }
         return totalPriceNum;
   } else {
-        //alert("No total price candidates found.");
+        //console.log("No total price candidates found.");
     return null;
   }
 }
@@ -138,7 +138,7 @@ async function tryRenderShoppingTotal() {
   }
 
   if (!target) {
-    //alert('renderShoppingTotal: no target found to scan.');
+    //console.log('renderShoppingTotal: no target found to scan.');
     return;
   }
 
@@ -152,7 +152,7 @@ async function tryRenderShoppingTotal() {
     try {
       total = renderShoppingTotal(target);
       if (total !== null && typeof total !== 'undefined') {
-        alert('renderShoppingTotal returned: ' + String(total));
+        console.log('[content] renderShoppingTotal returned: ' + String(total));
         break;
       }
       // Not found yet — wait and retry (unless this was the last attempt)
@@ -160,13 +160,13 @@ async function tryRenderShoppingTotal() {
         await new Promise(r => setTimeout(r, delayMs));
       }
     } catch (err) {
-      alert('renderShoppingTotal threw an error: ' + String(err));
+      console.error('[content] renderShoppingTotal threw an error: ' + String(err));
       break;
     }
   }
 
   if (total === null || typeof total === 'undefined') {
-    alert('renderShoppingTotal: no total found after retries.');
+    console.warn('renderShoppingTotal: no total found after retries.');
   }
 }
 
